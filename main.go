@@ -44,6 +44,8 @@ type Logger struct {
 func (l *Logger) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
 	l.handler.ServeHTTP(w, r)
+	tp := otel.GetTracerProvider()
+	fmt.Println((tp))
 	log.Printf("%v %s %s %v", time.Now(), r.Method, r.URL.Path, time.Since(start))
 }
 
@@ -54,8 +56,12 @@ func NewLogger(handlerToWrap http.Handler) *Logger {
 func newResource() *resource.Resource {
 	return resource.NewWithAttributes(
 		semconv.SchemaURL,
-		semconv.ServiceName("otlptrace-example"),
+		semconv.ServiceName("gotelemetryexample"),
 		semconv.ServiceVersion("0.0.1"),
+		attribute.String("service.name", "gotelemetryexample"),
+		attribute.String("service.application", "AZA"),
+		attribute.String("application.name", "gotelemetryexample"),
+		attribute.String("application.id", "AZA"),
 	)
 }
 
@@ -134,7 +140,7 @@ func main() {
 	fmt.Println(logLoction)
 
 	r := mux.NewRouter()
-	r.Use(otelmux.Middleware("SampleGoAppForGrafanaStack"))
+	r.Use(otelmux.Middleware("gotelemetryexample"))
 	wrappedMux := NewLogger(r)
 
 	r.HandleFunc("/", rootHandler)
