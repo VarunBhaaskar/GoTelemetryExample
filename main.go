@@ -100,6 +100,19 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello there! I am GoTelemetryExample! I take requests in \n1. / \n2. /books/{title}/page/{page}\n")
 }
 
+func errorEndpoint(w http.ResponseWriter, r *http.Request) {
+	// w.WriteHeader(http.StatusInternalServerError)
+	// w.Header().Set("Content-Type", "application/json")
+	// resp := make(map[string]string)
+	// resp["message"] = "Deliberate error raised"
+	// jsonResp, err := json.Marshal(resp)
+	// if err != nil {
+	// 	log.Fatalf("Error happened in JSON marshal. Err: %s", err)
+	// }
+	// w.Write(jsonResp)
+	panic("Deliberatrely Panicing here!! ")
+}
+
 func booksPageGetHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	title := vars["title"]
@@ -146,6 +159,8 @@ func main() {
 	r.HandleFunc("/", rootHandler)
 
 	r.HandleFunc("/hello", helloHandler)
+
+	r.HandleFunc("/gopanic", errorEndpoint)
 
 	r.HandleFunc("/books/{title}/page/{page}", booksPageGetHandler)
 
