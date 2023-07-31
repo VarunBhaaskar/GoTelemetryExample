@@ -37,7 +37,7 @@ services:
       - zipkin-all-in-one
 
   go-server:
-    image: varun1999/docker-go-telemetry-example:v2.0
+    image: varun1999/docker-go-telemetry-example:v2.1
     restart: always
     environment:
       - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4318

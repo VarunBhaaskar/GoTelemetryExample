@@ -10,8 +10,8 @@ COPY ./* ./
 
 RUN go mod download
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o /docker_GoTelemetryExample
+RUN CGO_ENABLED=0 GOOS=linux go build -o /GoTelemetryExample
 
 EXPOSE 8080
 
-CMD ["/docker_GoTelemetryExample"]
+CMD ["/bin/sh","-c","'/GoTelemetryExample'"]
